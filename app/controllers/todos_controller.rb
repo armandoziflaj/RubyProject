@@ -1,6 +1,6 @@
 class TodosController < ApplicationController
   # Use the callback to find the specific todo before actions
-  before_action :set_todo, only: [:show, :update, :destroy]
+  before_action :set_todo, only: [ :show, :update, :destroy ]
 
   def index
     @todos = current_user.todos

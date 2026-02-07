@@ -29,7 +29,7 @@ RSpec.configure do |config|
           }
         }
       },
-      security: [{ bearer_auth: [] }]
+      security: [ { bearer_auth: [] } ]
     }
   }
 

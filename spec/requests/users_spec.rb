@@ -41,7 +41,7 @@ RSpec.describe 'Users API', type: :request do
   path '/auth/logout' do
     get 'Logout' do
       tags 'Authentication'
-      security [bearer_auth: []]
+      security [ bearer_auth: [] ]
 
       response '200', 'Logout successful' do
         let(:user) { create(:user) }

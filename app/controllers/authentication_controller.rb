@@ -9,7 +9,7 @@ class AuthenticationController < ApplicationController
   end
 
   def logout
-    render json: { message: 'Logout successful' }, status: :ok  end
+    render json: { message: "Logout successful" }, status: :ok  end
   private
 
   def auth_params

@@ -14,7 +14,7 @@ RSpec.describe 'Items API', type: :request do
 
     get 'Retrieve all items for a todo' do
       tags 'Items'
-      security [bearer_auth: []]
+      security [ bearer_auth: [] ]
       produces 'application/json'
 
       response '200', 'Success' do
@@ -24,7 +24,7 @@ RSpec.describe 'Items API', type: :request do
 
     post 'Create a new item' do
       tags 'Items'
-      security [bearer_auth: []]
+      security [ bearer_auth: [] ]
       consumes 'application/json'
       parameter name: :item, in: :body, schema: {
         type: :object,
@@ -32,7 +32,7 @@ RSpec.describe 'Items API', type: :request do
           name: { type: :string, example: 'Walk the dog' },
           done: { type: :boolean, example: false }
         },
-        required: ['name']
+        required: [ 'name' ]
       }
 
       let(:item_params) { { name: 'New Item', done: false } }
@@ -48,7 +48,7 @@ RSpec.describe 'Items API', type: :request do
 
     get 'Retrieve a specific item' do
       tags 'Items'
-      security [bearer_auth: []]
+      security [ bearer_auth: [] ]
       response '200', 'Success' do
         run_test!
       end
@@ -56,7 +56,7 @@ RSpec.describe 'Items API', type: :request do
 
     put 'Update an item' do
       tags 'Items'
-      security [bearer_auth: []]
+      security [ bearer_auth: [] ]
       consumes 'application/json'
       parameter name: :item, in: :body, schema: {
         type: :object,
@@ -73,7 +73,7 @@ RSpec.describe 'Items API', type: :request do
 
     delete 'Delete an item' do
       tags 'Items'
-      security [bearer_auth: []]
+      security [ bearer_auth: [] ]
       response '204', 'Item deleted' do
         run_test!
       end

@@ -9,7 +9,7 @@ RSpec.describe 'Todos API', type: :request do
   path '/todos' do
     get 'Retrieve all user Todos' do
       tags 'Todos'
-      security [bearer_auth: []]
+      security [ bearer_auth: [] ]
       produces 'application/json'
 
       response '200', 'Success' do
@@ -19,14 +19,14 @@ RSpec.describe 'Todos API', type: :request do
 
     post 'Create a new Todo' do
       tags 'Todos'
-      security [bearer_auth: []]
+      security [ bearer_auth: [] ]
       consumes 'application/json'
       parameter name: :todo, in: :body, schema: {
         type: :object,
         properties: {
           title: { type: :string, example: 'Finish the project' }
         },
-        required: ['title']
+        required: [ 'title' ]
       }
 
       response '201', 'Todo Created' do
@@ -40,7 +40,7 @@ RSpec.describe 'Todos API', type: :request do
 
     get 'Get a specific Todo' do
       tags 'Todos'
-      security [bearer_auth: []]
+      security [ bearer_auth: [] ]
       response '200', 'Success' do
         run_test!
       end
@@ -53,7 +53,7 @@ RSpec.describe 'Todos API', type: :request do
 
     put 'Update a Todo' do
       tags 'Todos'
-      security [bearer_auth: []]
+      security [ bearer_auth: [] ]
       consumes 'application/json'
       parameter name: :todo, in: :body, schema: {
         type: :object,
@@ -69,7 +69,7 @@ RSpec.describe 'Todos API', type: :request do
 
     delete 'Delete a Todo' do
       tags 'Todos'
-      security [bearer_auth: []]
+      security [ bearer_auth: [] ]
       response '204', 'Todo Deleted' do
         run_test!
       end

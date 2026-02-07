@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  mount Rswag::Ui::Engine => '/api-docs'
-  mount Rswag::Api::Engine => '/api-docs'
+  mount Rswag::Ui::Engine => "/api-docs"
+  mount Rswag::Api::Engine => "/api-docs"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   resources :todos do
     resources :items
@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
   post "auth/login", to: "authentication#authenticate"
   post "signup", to: "users#create"
-  get 'auth/logout', to: 'authentication#logout'
+  get "auth/logout", to: "authentication#logout"
 
   # Defines the root path route ("/")
   # root "posts#index"
