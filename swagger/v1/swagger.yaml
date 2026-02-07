@@ -1,0 +1,260 @@
+---
+openapi: 3.0.1
+info:
+  title: ToAPIs API v1
+  version: v1
+  description: Todo API με JWT Authentication
+paths:
+  "/auth/login":
+    post:
+      summary: User Login
+      tags:
+      - Authentication
+      security: []
+      parameters: []
+      responses:
+        '200':
+          description: Login Successful
+        '401':
+          description: Invalid Credentials
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: armando@test.com
+                password:
+                  type: string
+                  example: '123'
+              required:
+              - email
+              - password
+  "/todos/{todo_id}/items":
+    parameters:
+    - name: todo_id
+      in: path
+      description: ID of the parent Todo
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Retrieve all items for a todo
+      tags:
+      - Items
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: Success
+    post:
+      summary: Create a new item
+      tags:
+      - Items
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '201':
+          description: Item created
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Walk the dog
+                done:
+                  type: boolean
+                  example: false
+              required:
+              - name
+  "/todos/{todo_id}/items/{id}":
+    parameters:
+    - name: todo_id
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      description: ID of the item
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Retrieve a specific item
+      tags:
+      - Items
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: Success
+    put:
+      summary: Update an item
+      tags:
+      - Items
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '204':
+          description: Item updated
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                done:
+                  type: boolean
+    delete:
+      summary: Delete an item
+      tags:
+      - Items
+      security:
+      - bearer_auth: []
+      responses:
+        '204':
+          description: Item deleted
+  "/todos":
+    get:
+      summary: Retrieve all user Todos
+      tags:
+      - Todos
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: Success
+    post:
+      summary: Create a new Todo
+      tags:
+      - Todos
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '201':
+          description: Todo Created
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Finish the project
+              required:
+              - title
+  "/todos/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: ID of the Todo
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Get a specific Todo
+      tags:
+      - Todos
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Todo Not Found
+    put:
+      summary: Update a Todo
+      tags:
+      - Todos
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '204':
+          description: Todo Updated
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Updated title
+    delete:
+      summary: Delete a Todo
+      tags:
+      - Todos
+      security:
+      - bearer_auth: []
+      responses:
+        '204':
+          description: Todo Deleted
+  "/signup":
+    post:
+      summary: User Registration
+      tags:
+      - Authentication
+      security: []
+      parameters: []
+      responses:
+        '201':
+          description: User created successfully
+        '422':
+          description: Unprocessable Entity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Armando
+                email:
+                  type: string
+                  example: armando@test.com
+                password:
+                  type: string
+                  example: password123
+                password_confirmation:
+                  type: string
+                  example: password123
+              required:
+              - name
+              - email
+              - password
+              - password_confirmation
+  "/auth/logout":
+    get:
+      summary: Logout
+      tags:
+      - Authentication
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: Logout successful
+servers:
+- url: http://localhost:3000
+  description: Development Server
+components:
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- bearer_auth: []
