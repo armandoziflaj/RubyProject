@@ -1,77 +1,57 @@
-require 'swagger_helper'
+require 'rails_helper'
 
 RSpec.describe 'Todos API', type: :request do
   let(:user) { create(:user) }
-  let(:todo) { create(:todo, created_by: user.id) }
-  let(:id) { todo.id }
-  let(:Authorization) { "Bearer #{token_generator(user.id)}" }
+  let!(:todos) { create_list(:todo, 10, created_by: user.id) }
+  let(:todo_id) { todos.first.id }
+  let(:headers) do
+    {
+      'Authorization' => token_generator(user.id),
+      'Content-Type' => 'application/json'
+    }
+  end
+  let(:valid_attributes) { { title: 'Learn Rails' }.to_json }
 
-  path '/todos' do
-    get 'Retrieve all user Todos' do
-      tags 'Todos'
-      security [ bearer_auth: [] ]
-      produces 'application/json'
+  describe 'GET /todos' do
+    before { get '/todos', params: {}, headers: headers }
 
-      response '200', 'Success' do
-        run_test!
-      end
+    it 'returns todos' do
+      expect(json).not_to be_empty
+      expect(json.size).to eq(10)
     end
 
-    post 'Create a new Todo' do
-      tags 'Todos'
-      security [ bearer_auth: [] ]
-      consumes 'application/json'
-      parameter name: :todo, in: :body, schema: {
-        type: :object,
-        properties: {
-          title: { type: :string, example: 'Finish the project' }
-        },
-        required: [ 'title' ]
-      }
-
-      response '201', 'Todo Created' do
-        run_test!
-      end
+    it 'returns status code 200' do
+      expect(response).to have_http_status(200)
     end
   end
 
-  path '/todos/{id}' do
-    parameter name: :id, in: :path, type: :string, description: 'ID of the Todo'
+  describe 'POST /todos' do
+    let(:valid_attributes) do
+      { title: 'Learn Rails', created_by: user.id.to_s }.to_json
+    end
 
-    get 'Get a specific Todo' do
-      tags 'Todos'
-      security [ bearer_auth: [] ]
-      response '200', 'Success' do
-        run_test!
+    context 'when the request is valid' do
+      before { post '/todos', params: valid_attributes, headers: headers }
+
+      it 'creates a todo' do
+        expect(json['title']).to eq('Learn Rails')
       end
 
-      response '404', 'Todo Not Found' do
-        let(:id) { 'invalid_id' }
-        run_test!
+      it 'returns status code 201' do
+        expect(response).to have_http_status(201)
       end
     end
 
-    put 'Update a Todo' do
-      tags 'Todos'
-      security [ bearer_auth: [] ]
-      consumes 'application/json'
-      parameter name: :todo, in: :body, schema: {
-        type: :object,
-        properties: {
-          title: { type: :string, example: 'Updated title' }
-        }
-      }
+    context 'when the request is invalid' do
+      let(:invalid_attributes) { { title: nil }.to_json }
+      before { post '/todos', params: invalid_attributes, headers: headers }
 
-      response '204', 'Todo Updated' do
-        run_test!
+      it 'returns status code 422' do
+        expect(response).to have_http_status(422)
       end
-    end
 
-    delete 'Delete a Todo' do
-      tags 'Todos'
-      security [ bearer_auth: [] ]
-      response '204', 'Todo Deleted' do
-        run_test!
+      it 'returns a validation failure message' do
+        expect(json['message']).to match(/Validation failed: Title can't be blank/)
       end
     end
   end

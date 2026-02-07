@@ -7,7 +7,12 @@ RSpec.describe 'Items API', type: :request do
 
   let(:todo_id) { todo.id }
   let(:id) { item.id }
-
+  let(:headers) do
+    {
+      'Authorization' => token_generator(user.id),
+      'Content-Type' => 'application/json'
+    }
+  end
   let(:Authorization) { "Bearer #{token_generator(user.id)}" }
   path '/todos/{todo_id}/items' do
     parameter name: :todo_id, in: :path, type: :string, description: 'ID of the parent Todo'
